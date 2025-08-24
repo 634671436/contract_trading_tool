@@ -316,12 +316,16 @@
             <div class="result-section">
                 <div class="section-title">仓位信息</div>
                 <div class="result-item">
-                    <span class="result-label">建议仓位数量</span>
+                    <span class="result-label">仓位数量</span>
                     <span class="result-value" id="positionSize">-</span>
                 </div>
                 <div class="result-item">
                     <span class="result-label">仓位价值 (USD)</span>
                     <span class="result-value" id="positionAmount">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">3X杠杆开仓金额 (USD)</span>
+                    <span class="result-value" id="leverageAmount">-</span>
                 </div>
             </div>
 
@@ -379,6 +383,7 @@
                         rr3: document.getElementById('rr3Display'),
                         positionSize: document.getElementById('positionSize'),
                         positionAmount: document.getElementById('positionAmount'),
+                        leverageAmount: document.getElementById('leverageAmount'),
                         tp1: document.getElementById('tp1'),
                         tp2: document.getElementById('tp2'),
                         tp3: document.getElementById('tp3')
@@ -523,10 +528,12 @@
 
                     const positionSize = values.maxLoss / Math.abs(values.entryPrice - values.stopLoss);
                     const positionAmount = positionSize * values.entryPrice;
+                    const leverageAmount = positionAmount / 3; // 3X杠杆，实际需要投入1/3的资金
 
                     const results = {
                         positionSize,
                         positionAmount,
+                        leverageAmount,
                         tp1: this.calculateTakeProfit(values.entryPrice, values.stopLoss, values.rr1),
                         tp2: this.calculateTakeProfit(values.entryPrice, values.stopLoss, values.rr2),
                         tp3: this.calculateTakeProfit(values.entryPrice, values.stopLoss, values.rr3)
@@ -542,6 +549,7 @@
             updateResults(results) {
                 this.displays.positionSize.textContent = this.formatNumber(results.positionSize);
                 this.displays.positionAmount.textContent = this.formatNumber(results.positionAmount);
+                this.displays.leverageAmount.textContent = this.formatNumber(results.leverageAmount);
                 this.displays.tp1.textContent = this.formatNumber(results.tp1);
                 this.displays.tp2.textContent = this.formatNumber(results.tp2);
                 this.displays.tp3.textContent = this.formatNumber(results.tp3);
