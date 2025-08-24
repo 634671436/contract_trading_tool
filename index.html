@@ -277,6 +277,8 @@
             <div class="error" id="maxLossError"></div>
         </div>
 
+        <div style="border-bottom: 2px solid var(--border-color); margin: 2rem 0;"></div>
+
         <div class="risk-reward-inputs">
             <div class="form-group">
                 <label for="rr1">
@@ -474,7 +476,7 @@
                     },
                     maxLoss: {
                         condition: !values.maxLoss || values.maxLoss <= 0,
-                        message: '请输入有效的最大止损金额'
+                        message: '请输入最大止损金额, 一般为总仓位的1% - 2%'
                     }
                 };
 
