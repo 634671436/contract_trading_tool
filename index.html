@@ -263,6 +263,7 @@
             </label>
             <input type="number" id="stopLoss" placeholder="例如: 49000" step="any">
             <div class="error" id="stopLossError"></div>
+            <div id="priceDiffDisplay" style="color: var(--error-color); font-size: 0.875rem; margin-top: 0.5rem; font-weight: 600; display: none;"></div>
         </div>
 
         <div class="form-group">
@@ -386,7 +387,8 @@
                         leverageAmount: document.getElementById('leverageAmount'),
                         tp1: document.getElementById('tp1'),
                         tp2: document.getElementById('tp2'),
-                        tp3: document.getElementById('tp3')
+                        tp3: document.getElementById('tp3'),
+                        priceDiff: document.getElementById('priceDiffDisplay')
                     };
 
                     this.errors = {
@@ -530,13 +532,17 @@
                     const positionAmount = positionSize * values.entryPrice;
                     const leverageAmount = positionAmount / 3; // 3X杠杆，实际需要投入1/3的资金
 
+                    const priceDiff = Math.abs(values.entryPrice - values.stopLoss);
+                    const priceDiffPercentage = (priceDiff / values.entryPrice) * 100;
+                    
                     const results = {
                         positionSize,
                         positionAmount,
                         leverageAmount,
                         tp1: this.calculateTakeProfit(values.entryPrice, values.stopLoss, values.rr1),
                         tp2: this.calculateTakeProfit(values.entryPrice, values.stopLoss, values.rr2),
-                        tp3: this.calculateTakeProfit(values.entryPrice, values.stopLoss, values.rr3)
+                        tp3: this.calculateTakeProfit(values.entryPrice, values.stopLoss, values.rr3),
+                        priceDiffPercentage
                     };
 
                     this.updateResults(results);
@@ -553,6 +559,12 @@
                 this.displays.tp1.textContent = this.formatNumber(results.tp1);
                 this.displays.tp2.textContent = this.formatNumber(results.tp2);
                 this.displays.tp3.textContent = this.formatNumber(results.tp3);
+                
+                // 更新价差显示
+                if (results.priceDiffPercentage !== undefined) {
+                    this.displays.priceDiff.textContent = `价差: ${results.priceDiffPercentage.toFixed(2)}%`;
+                    this.displays.priceDiff.style.display = 'block';
+                }
             }
 
             clearResults() {
@@ -561,6 +573,8 @@
                         display.textContent = '-';
                     }
                 });
+                // 隐藏价差显示
+                this.displays.priceDiff.style.display = 'none';
             }
 
             formatNumber(number) {
