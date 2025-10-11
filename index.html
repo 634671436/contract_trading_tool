@@ -331,6 +331,14 @@
             </div>
 
             <div class="result-section">
+                <div class="section-title">止损价格</div>
+                <div class="result-item">
+                    <span class="result-label">止损价格 (USD)</span>
+                    <span class="result-value" id="stopLossDisplay">-</span>
+                </div>
+            </div>
+
+            <div class="result-section">
                 <div class="section-title">止盈价格</div>
                 <div class="result-item">
                     <span class="result-label">止盈点 1 (RR: <span id="rr1Display">1.0</span>)</span>
@@ -385,6 +393,7 @@
                         positionSize: document.getElementById('positionSize'),
                         positionAmount: document.getElementById('positionAmount'),
                         leverageAmount: document.getElementById('leverageAmount'),
+                        stopLoss: document.getElementById('stopLossDisplay'),
                         tp1: document.getElementById('tp1'),
                         tp2: document.getElementById('tp2'),
                         tp3: document.getElementById('tp3'),
@@ -540,6 +549,7 @@
                         positionSize,
                         positionAmount,
                         leverageAmount,
+                        stopLoss: values.stopLoss,
                         tp1: this.calculateTakeProfit(values.entryPrice, values.stopLoss, values.rr1),
                         tp2: this.calculateTakeProfit(values.entryPrice, values.stopLoss, values.rr2),
                         tp3: this.calculateTakeProfit(values.entryPrice, values.stopLoss, values.rr3),
@@ -558,6 +568,7 @@
                 this.displays.positionSize.textContent = this.formatNumber(results.positionSize);
                 this.displays.positionAmount.textContent = this.formatNumber(results.positionAmount);
                 this.displays.leverageAmount.textContent = this.formatNumber(results.leverageAmount);
+                this.displays.stopLoss.textContent = this.formatNumber(results.stopLoss);
                 this.displays.tp1.textContent = this.formatNumber(results.tp1);
                 this.displays.tp2.textContent = this.formatNumber(results.tp2);
                 this.displays.tp3.textContent = this.formatNumber(results.tp3);
