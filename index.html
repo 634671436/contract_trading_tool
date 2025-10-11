@@ -321,11 +321,11 @@
                     <span class="result-value" id="positionSize">-</span>
                 </div>
                 <div class="result-item">
-                    <span class="result-label">仓位价值 (USD)</span>
+                    <span class="result-label">开仓名义本金N (USDT)</span>
                     <span class="result-value" id="positionAmount">-</span>
                 </div>
                 <div class="result-item">
-                    <span class="result-label" style="color: var(--error-color);">3X杠杆开仓金额 (USD)</span>
+                    <span class="result-label" style="color: var(--error-color);">3X杠杆保证金 (USD)</span>
                     <span class="result-value" id="leverageAmount" style="color: var(--error-color);">-</span>
                 </div>
             </div>
@@ -534,6 +534,7 @@
 
                     const priceDiff = Math.abs(values.entryPrice - values.stopLoss);
                     const priceDiffPercentage = (priceDiff / values.entryPrice) * 100;
+                    const isLong = values.entryPrice > values.stopLoss; // 做多
                     
                     const results = {
                         positionSize,
@@ -542,7 +543,8 @@
                         tp1: this.calculateTakeProfit(values.entryPrice, values.stopLoss, values.rr1),
                         tp2: this.calculateTakeProfit(values.entryPrice, values.stopLoss, values.rr2),
                         tp3: this.calculateTakeProfit(values.entryPrice, values.stopLoss, values.rr3),
-                        priceDiffPercentage
+                        priceDiffPercentage,
+                        isLong
                     };
 
                     this.updateResults(results);
@@ -562,7 +564,10 @@
                 
                 // 更新价差显示
                 if (results.priceDiffPercentage !== undefined) {
-                    this.displays.priceDiff.textContent = `价差: ${results.priceDiffPercentage.toFixed(2)}%`;
+                    const direction = results.isLong ? '做多' : '做空';
+                    const color = results.isLong ? 'var(--success-color)' : 'var(--error-color)';
+                    this.displays.priceDiff.textContent = `价差: ${results.priceDiffPercentage.toFixed(2)}% (${direction})`;
+                    this.displays.priceDiff.style.color = color;
                     this.displays.priceDiff.style.display = 'block';
                 }
             }
