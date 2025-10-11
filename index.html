@@ -314,6 +314,10 @@
         </div>
 
         <div class="result">
+            <div id="tradingDirectionIndicator" style="display: none; margin-bottom: 1.5rem;">
+                <div id="directionBadge" style="display: inline-block; padding: 0.5rem 1rem; border-radius: 6px; font-weight: 600; font-size: 0.875rem; color: white; min-width: 60px; text-align: center;"></div>
+            </div>
+            
             <div class="result-section">
                 <div class="section-title">仓位信息</div>
                 <div class="result-item">
@@ -397,7 +401,9 @@
                         tp1: document.getElementById('tp1'),
                         tp2: document.getElementById('tp2'),
                         tp3: document.getElementById('tp3'),
-                        priceDiff: document.getElementById('priceDiffDisplay')
+                        priceDiff: document.getElementById('priceDiffDisplay'),
+                        directionIndicator: document.getElementById('tradingDirectionIndicator'),
+                        directionBadge: document.getElementById('directionBadge')
                     };
 
                     this.errors = {
@@ -581,6 +587,15 @@
                     this.displays.priceDiff.style.color = color;
                     this.displays.priceDiff.style.display = 'block';
                 }
+                
+                // 更新交易方向指示器
+                if (results.isLong !== undefined) {
+                    const direction = results.isLong ? '做多' : '做空';
+                    const backgroundColor = results.isLong ? 'var(--success-color)' : 'var(--error-color)';
+                    this.displays.directionBadge.textContent = direction;
+                    this.displays.directionBadge.style.backgroundColor = backgroundColor;
+                    this.displays.directionIndicator.style.display = 'block';
+                }
             }
 
             clearResults() {
@@ -591,6 +606,8 @@
                 });
                 // 隐藏价差显示
                 this.displays.priceDiff.style.display = 'none';
+                // 隐藏交易方向指示器
+                this.displays.directionIndicator.style.display = 'none';
             }
 
             formatNumber(number) {
